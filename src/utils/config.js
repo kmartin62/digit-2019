@@ -1,3 +1,5 @@
+import firebase from "../containers/App/App";
+
 export var firebaseConfig = {
     apiKey: "AIzaSyDQ0raBoqcHEq2d7AsUlMqoOVa00iMbfhI",
     authDomain: "react-airq.firebaseapp.com",
@@ -8,3 +10,7 @@ export var firebaseConfig = {
     appId: "1:779816587633:web:134980c74c476a510626d0",
     measurementId: "G-8QZDF2JT68"
 };
+
+// firebase.initializeApp(firebaseConfig);
+
+export default firebase;

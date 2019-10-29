@@ -2,7 +2,25 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import './App.css';
 import { firebaseConfig } from '../../utils/config';
-import firebase from 'firebase';
+import {Bar} from 'react-chartjs-2';
+import firebase from 'firebase/app';
+import Chart from '../Chart';
+import 'firebase/database'; // If using Firebase database
+import 'firebase/storage';  // If using Firebase storage
+const data = {
+    labels: [],
+    datasets: [
+        {
+            label: '',
+            backgroundColor: 'rgba(255,99,132,0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            // borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+            hoverBorderColor: 'rgba(255,99,132,1)',
+            data: []
+        }
+    ]
+};
 
 const options = [
     { value: 'skopje', label: 'Skopje' },
@@ -15,8 +33,9 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.app = firebase.initializeApp(firebaseConfig);
-        this.database = this.app.database().ref().child("speed");
+        if(!firebase.apps.length) {
+            this.app = firebase.initializeApp(firebaseConfig);
+        }
 
         this.state = {
             pm10: null,
@@ -25,28 +44,30 @@ class App extends Component {
             city_name: null,
             value: '',
             selectedOption: null,
-            speed: 10
         };
+    }
+
+
+
+    componentDidMount() {
+        this.readUserData("Skopje");
     }
 
     readUserData(city_name){
         firebase.database().ref(city_name + "/").child(this.getKey().toString()).once('value', (snapshot) => {
             if(snapshot.exists()){
-                console.log("Exists");
+                console.log("READING, FETCHING");
                 this.setState({ pm10: snapshot.val().pm10 });
                 this.setState({ pm25: snapshot.val().pm25 });
                 this.setState({ aqi: snapshot.val().aqi });
                 this.setState({city_name: city_name});
+
             }
             else {
+                console.log("ININ");
                 this.getRequest(city_name);
-                console.log("Created");
             }
 
-            // this.setState({ pm10: snapshot.val().pm10 });
-            // this.setState({ pm25: snapshot.val().pm25 });
-            // this.setState({ aqi: snapshot.val().aqi });
-            // this.setState({city_name: city_name});
         })
     }
 
@@ -55,8 +76,6 @@ class App extends Component {
             pm10,
             pm25,
             aqi
-        }).then((data) => {
-            console.log(data)
         }).catch((error) => {
             console.log("error ", error)
         })
@@ -64,42 +83,25 @@ class App extends Component {
 
     getKey(){
         let d = new Date();
-        let path = d.toLocaleDateString().toString().split("/").join("-") + "T" + (d.getHours()).toString() + ":00";
-        return path;
+        return d.toLocaleDateString().toString().split("/").join("-") + "T" + (d.getHours()).toString() + ":00";
     }
 
-    componentDidMount(){
-        console.log(this.getKey());
-
-        this.getRequest("Skopje");
-
-        this.database.on('value', snap => {
-            this.setState({
-                speed: snap.val()
-            });
-        });
-
-        // this.writeUserData("Skopje", "TTTTT", "test@g.com", "asd", "fgh");
-
-        // this.database.on('child_added', snap => {
-        //     previous.push({
-        //         speed: 5
-        //     })
-        // })
-    }
+    // componentDidMount(){
+        // this.readUserData("Skopje");
+    // }
 
     handleChange = selectedOption => {
         this.setState({ selectedOption });
         this.readUserData(selectedOption.label);
-        console.log(`Option selected:`, selectedOption.label);
+        console.log(selectedOption.label);
     };
+
 
     getRequest(city){
         let path = "https://api.weatherbit.io/v2.0/current/airquality?city=" + city + "&country=MK&key=498f03aff502413dadf98ed9124ca628";
         fetch(path)
             .then(res => res.json())
             .then((data) => {
-                console.log("IMINIMIN");
                 this.writeUserData(city, this.getKey().toString(), data.data[0].pm10, data.data[0].pm25, data.data[0].aqi);
                 this.setState({ pm10: data.data[0].pm10 });
                 this.setState({ pm25: data.data[0].pm25 });
@@ -109,14 +111,17 @@ class App extends Component {
 
     }
 
-    
+
     render() {
         const { selectedOption } = this.state;
-
+        data.labels = ["PM10", "PM25", "AQI"];
+        data.datasets[0].data=[this.state.pm10, this.state.pm25, this.state.aqi];
+            // console.log(this.state.pm10);
         return (
 
             <div>
             <Select
+                placeholder={"Skopje"}
                     value={selectedOption}
                     onChange={this.handleChange}
                     options={options}
@@ -142,6 +147,13 @@ class App extends Component {
                     </tr>
                     </thead>
                 </table>
+                <div style={{width: 555}}>
+                    <Bar data={data} />
+                </div>
+                {/*<div style={{width: 555}}>*/}
+                    {/*<Bar data={data} />*/}
+                {/*</div>*/}
+                {/*<Chart pm10={'PM10'} pm25={'PM25'} pm10measured={this.state.pm10}/>*/}
             </div>
         );
     }
