@@ -4,19 +4,20 @@ import './App.css';
 import { firebaseConfig } from '../../utils/config';
 import {Bar} from 'react-chartjs-2';
 import firebase from 'firebase/app';
-import Chart from '../Chart';
 import 'firebase/database'; // If using Firebase database
 import 'firebase/storage';  // If using Firebase storage
+import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton,
+    TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed,
+    TwitterOnAirButton } from 'react-twitter-embed';
+
+
 const data = {
     labels: [],
     datasets: [
         {
             label: '',
-            backgroundColor: 'rgba(255,99,132,0.2)',
+            backgroundColor: 'rgb(153, 153, 102)',
             borderColor: 'rgba(255,99,132,1)',
-            // borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
             data: []
         }
     ]
@@ -54,17 +55,21 @@ class App extends Component {
     }
 
     readUserData(city_name){
-        firebase.database().ref(city_name + "/").child(this.getKey().toString()).once('value', (snapshot) => {
+        firebase.database().ref("Momentalno/" + city_name + "/").once('value', (snapshot) => {
             if(snapshot.exists()){
-                console.log("READING, FETCHING");
-                this.setState({ pm10: snapshot.val().pm10 });
-                this.setState({ pm25: snapshot.val().pm25 });
-                this.setState({ aqi: snapshot.val().aqi });
-                this.setState({city_name: city_name});
-
+                if(snapshot.val().key.localeCompare(this.getKey()) === 0) {
+                    console.log(snapshot.val().key.localeCompare(this.getKey()));
+                    this.setState({pm10: snapshot.val().pm10});
+                    this.setState({pm25: snapshot.val().pm25});
+                    this.setState({aqi: snapshot.val().aqi});
+                    this.setState({city_name: city_name});
+                }
+                else {
+                    this.getRequest(city_name);
+                }
             }
+
             else {
-                console.log("ININ");
                 this.getRequest(city_name);
             }
 
@@ -72,23 +77,32 @@ class App extends Component {
     }
 
     writeUserData(city_name, key, pm10, pm25, aqi){
-        firebase.database().ref(city_name + "/").child(key).set({
+        let date = this.getKey();
+        firebase.database().ref("Momentalno/" + city_name + "/").set({
+            city_name,
             pm10,
             pm25,
-            aqi
+            aqi,
+            key
         }).catch((error) => {
             console.log("error ", error)
-        })
+        });
+
+        firebase.database().ref("Istorija/").push({
+            city_name,
+            pm10,
+            pm25,
+            aqi,
+            key
+        }).catch((error) => {
+            console.log("error ", error)
+        });
     }
 
-    getKey(){
+     getKey(){
         let d = new Date();
         return d.toLocaleDateString().toString().split("/").join("-") + "T" + (d.getHours()).toString() + ":00";
     }
-
-    // componentDidMount(){
-        // this.readUserData("Skopje");
-    // }
 
     handleChange = selectedOption => {
         this.setState({ selectedOption });
@@ -113,15 +127,15 @@ class App extends Component {
 
 
     render() {
+
         const { selectedOption } = this.state;
         data.labels = ["PM10", "PM25", "AQI"];
         data.datasets[0].data=[this.state.pm10, this.state.pm25, this.state.aqi];
-            // console.log(this.state.pm10);
         return (
 
             <div>
             <Select
-                placeholder={"Skopje"}
+                    placeholder={"Skopje"}
                     value={selectedOption}
                     onChange={this.handleChange}
                     options={options}
@@ -150,10 +164,15 @@ class App extends Component {
                 <div style={{width: 555}}>
                     <Bar data={data} />
                 </div>
-                {/*<div style={{width: 555}}>*/}
-                    {/*<Bar data={data} />*/}
-                {/*</div>*/}
-                {/*<Chart pm10={'PM10'} pm25={'PM25'} pm10measured={this.state.pm10}/>*/}
+                <TwitterTimelineEmbed
+                    sourceType="profile"
+                    // screenName="mrbeastyt"
+                    tag={'#cybersecurity'}
+                    options={{height: 400}}
+                />
+                <TwitterHashtagButton
+                    tag={'cybersecurity'}
+                />
             </div>
         );
     }

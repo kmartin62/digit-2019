@@ -1,17 +1,21 @@
-import firebase from 'firebase';
+import firebase from "../containers/App/App";
 
-const config={
-    apiKey: "AIzaSyDQ0raBoqcHEq2d7AsUlMqoOVa00iMbfhI",
-    authDomain: "react-airq.firebaseapp.com",
-    databaseURL: "https://react-airq.firebaseio.com",
-    projectId: "react-airq",
-    storageBucket: "react-airq.appspot.com",
-    messagingSenderId: "779816587633",
-    appId: "1:779816587633:web:134980c74c476a510626d0",
-    measurementId: "G-8QZDF2JT68"
+export const readUserdata = (city_name) => {
+    firebase.database().ref(city_name + "/").child(this.getKey().toString()).once('value', (snapshot) => {
+                if(snapshot.exists()){
+                    console.log("READING, FETCHING");
+                    this.setState({ pm10: snapshot.val().pm10 });
+                    this.setState({ pm25: snapshot.val().pm25 });
+                    this.setState({ aqi: snapshot.val().aqi });
+                    this.setState({city_name: city_name});
 
+                }
+                else {
+                    console.log("ININ");
+                    this.getRequest(city_name);
+                }
+
+            })
 };
 
-const Firebase = firebase.initializeApp(config);
 
-export default Firebase;
