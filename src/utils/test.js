@@ -1,4 +1,4 @@
-// import firebase from "../containers/App/App";
+// import firebase from "../containers/TestComponent/TestComponent";
 import firebase from 'firebase/app';
 export const testfunction = () => {
     let cars = ["Saab", "Volvo", "BMW"];

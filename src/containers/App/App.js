@@ -7,9 +7,16 @@ import firebase from 'firebase/app';
 import 'firebase/database'; // If using Firebase database
 import 'firebase/storage';  // If using Firebase storage
 import Iframe from 'react-iframe'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton,
     TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed,
     TwitterOnAirButton } from 'react-twitter-embed';
+import TestComponent from "../TestComponent/TestComponent";
 
 
 const data = {
@@ -44,6 +51,7 @@ class App extends Component {
             pm25: null,
             aqi: null,
             city_name: null,
+            city: this.props.someData,
             value: '',
             selectedOption: null,
         };
@@ -52,6 +60,11 @@ class App extends Component {
 
 
     componentDidMount() {
+
+        window.setInterval(() => {
+            alert("Test")
+        }, 5000);
+
         this.readUserData("Skopje");
     }
 
@@ -128,13 +141,13 @@ class App extends Component {
 
 
     render() {
-
         const { selectedOption } = this.state;
         data.labels = ["PM10", "PM25", "AQI"];
         data.datasets[0].data=[this.state.pm10, this.state.pm25, this.state.aqi];
         return (
 
             <div>
+                {/*<TestComponent/>*/}
             <Select
                     placeholder={"Skopje"}
                     value={selectedOption}
@@ -165,32 +178,29 @@ class App extends Component {
                 <div style={{width: 555}}>
                     <Bar data={data} />
                 </div>
-                <TwitterTimelineEmbed
-                    sourceType="profile"
-                    // screenName="mrbeastyt"
-                    tag={'#cybersecurity'}
-                    options={{height: 400}}
-                />
-                <TwitterHashtagButton
-                    tag={'cybersecurity'}
-                />
-                <TwitterMentionButton
-                    screenName={'saurabhnemade'}
-                />
-                <TwitterTweetEmbed
-                    tweetId={'933354946111705097'}
-                />
+
+                {/*<TwitterHashtagButton*/}
+                    {/*tag={'cybersecurity'}*/}
+                {/*/>*/}
+                {/*<TwitterMentionButton*/}
+                    {/*screenName={'saurabhnemade'}*/}
+                {/*/>*/}
+
                 <Iframe url="https://www.sociablekit.com/app/embed/index.php?embed_id=30223"
-                        width="450px"
-                        height="1050px"
-                        id="myId"
+                        frameborder='0' width='500' height='500'
                         className="myClassname"
                         display="initial"
                         position="relative"/>
 
+                <TwitterTweetEmbed
+                tweetId={'933354946111705097'}
+                />
+
                 {/*<a href="https://twitter.com/intent/tweet?button_hashtag=LoveTwitter&ref_src=twsrc%5Etfw"*/}
                    {/*className="twitter-hashtag-button" data-lang="en" data-show-count="false">Tweet #LoveTwitter</a>*/}
                 {/*<script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>*/}
+
+
             </div>
         );
     }

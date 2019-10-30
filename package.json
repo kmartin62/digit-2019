@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@progress/kendo-react-dropdowns": "^3.6.0",
+    "apexcharts": "^3.10.1",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.1",
     "firebase": "^7.2.2",
@@ -11,9 +12,11 @@
     "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.11.0",
     "react-iframe": "^1.8.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "react-select": "^3.0.8",
-    "react-twitter-embed": "^3.0.3"
+    "react-twitter-embed": "^3.0.3",
+    "react-apexcharts": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
