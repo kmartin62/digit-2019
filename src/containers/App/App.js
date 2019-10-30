@@ -6,6 +6,7 @@ import {Bar} from 'react-chartjs-2';
 import firebase from 'firebase/app';
 import 'firebase/database'; // If using Firebase database
 import 'firebase/storage';  // If using Firebase storage
+import Iframe from 'react-iframe'
 import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton,
     TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed,
     TwitterOnAirButton } from 'react-twitter-embed';
@@ -173,6 +174,23 @@ class App extends Component {
                 <TwitterHashtagButton
                     tag={'cybersecurity'}
                 />
+                <TwitterMentionButton
+                    screenName={'saurabhnemade'}
+                />
+                <TwitterTweetEmbed
+                    tweetId={'933354946111705097'}
+                />
+                <Iframe url="https://www.sociablekit.com/app/embed/index.php?embed_id=30223"
+                        width="450px"
+                        height="1050px"
+                        id="myId"
+                        className="myClassname"
+                        display="initial"
+                        position="relative"/>
+
+                {/*<a href="https://twitter.com/intent/tweet?button_hashtag=LoveTwitter&ref_src=twsrc%5Etfw"*/}
+                   {/*className="twitter-hashtag-button" data-lang="en" data-show-count="false">Tweet #LoveTwitter</a>*/}
+                {/*<script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>*/}
             </div>
         );
     }
