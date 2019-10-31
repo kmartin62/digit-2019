@@ -17,6 +17,7 @@ import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterH
     TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed,
     TwitterOnAirButton } from 'react-twitter-embed';
 import TestComponent from "../TestComponent/TestComponent";
+import MapComponent from "../MapComponent/MapComponent";
 
 
 const data = {
@@ -46,6 +47,7 @@ class App extends Component {
             this.app = firebase.initializeApp(firebaseConfig);
         }
 
+
         this.state = {
             pm10: null,
             pm25: null,
@@ -55,16 +57,13 @@ class App extends Component {
             value: '',
             selectedOption: null,
         };
+
+        this.myFunction = this.myFunction.bind(this);
     }
 
 
 
     componentDidMount() {
-
-        window.setInterval(() => {
-            alert("Test")
-        }, 5000);
-
         this.readUserData("Skopje");
     }
 
@@ -126,7 +125,7 @@ class App extends Component {
 
 
     getRequest(city){
-        let path = "https://api.weatherbit.io/v2.0/current/airquality?city=" + city + "&country=MK&key=498f03aff502413dadf98ed9124ca628";
+        let path = "https://api.weatherbit.io/v2.0/current/airquality?city=" + city + "&country=MK&key=099595fa7e88462ea8e4a26befd8d035";
         fetch(path)
             .then(res => res.json())
             .then((data) => {
@@ -137,6 +136,20 @@ class App extends Component {
                 this.setState({ city_name: data.city_name})
             });
 
+    }
+
+    clicked(e){
+        console.log(e.target.id);
+        this.readUserData(e.target.id)
+    }
+
+    // testFunction(e){
+    //     console.log("IMINIMIN" + e.target);
+    // }
+
+    myFunction(param){
+        this.readUserData(param.target.id);
+        console.log("do something", param.target.id);
     }
 
 
@@ -153,6 +166,7 @@ class App extends Component {
                     value={selectedOption}
                     onChange={this.handleChange}
                     options={options}
+                    style={{width:"50%"}}
                 />
 
                 <table className="table" width={"50%"}>
@@ -179,26 +193,17 @@ class App extends Component {
                     <Bar data={data} />
                 </div>
 
-                {/*<TwitterHashtagButton*/}
-                    {/*tag={'cybersecurity'}*/}
+                {/*<Iframe url="https://www.sociablekit.com/app/embed/index.php?embed_id=30223"*/}
+                        {/*frameborder='0' width='500' height='500'*/}
+                        {/*className="myClassname"*/}
+                        {/*display="initial"*/}
+                        {/*position="relative"/>*/}
+
+                {/*<TwitterTweetEmbed*/}
+                {/*tweetId={'933354946111705097'}*/}
                 {/*/>*/}
-                {/*<TwitterMentionButton*/}
-                    {/*screenName={'saurabhnemade'}*/}
-                {/*/>*/}
 
-                <Iframe url="https://www.sociablekit.com/app/embed/index.php?embed_id=30223"
-                        frameborder='0' width='500' height='500'
-                        className="myClassname"
-                        display="initial"
-                        position="relative"/>
-
-                <TwitterTweetEmbed
-                tweetId={'933354946111705097'}
-                />
-
-                {/*<a href="https://twitter.com/intent/tweet?button_hashtag=LoveTwitter&ref_src=twsrc%5Etfw"*/}
-                   {/*className="twitter-hashtag-button" data-lang="en" data-show-count="false">Tweet #LoveTwitter</a>*/}
-                {/*<script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>*/}
+               <MapComponent myFunction={this.myFunction}/>
 
 
             </div>

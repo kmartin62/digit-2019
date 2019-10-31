@@ -1,6 +1,7 @@
 import ApexCharts from 'apexcharts';
 import React, { Component } from "react";
 import ReactApexCharts from 'react-apexcharts'
+import $ from 'jquery';
 
 var lastDate = 0;
 var data = []
@@ -44,6 +45,8 @@ function getNewSeries(baseval, yrange) {
     })
 
 }
+
+$('#sauce').on('click',function(){console.log("ASD")});
 
 function resetData(){
     // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series
@@ -135,6 +138,10 @@ class TestComponent extends React.Component {
 
             <div id="chart">
                 <ReactApexCharts options={this.state.options} series={this.state.series} type="line" height="350" />
+
+                <svg width="300px" height="100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path id="sauce" d="M5 5 L170 3 L295 15 L280 95 L130 80 L110 95 L20 85" stroke="transparent" fill="#8eab32"></path>
+                </svg>
             </div>
 
 
