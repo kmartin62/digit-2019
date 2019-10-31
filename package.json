@@ -3,12 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@progress/kendo-react-dropdowns": "^3.6.0",
-    "bootstrap": "^4.3.1",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "@progress/kendo-react-dropdowns": "3.6.0",
+    "bootstrap": "4.3.1",
+    "chart.js": "2.9.1",
+    "firebase": "^6.6.2",
+    "react": "16.11.0",
+    "react-chartjs-2": "2.8.0",
+    "react-dom": "16.11.0",
+    "react-iframe": "^1.8.0",
     "react-scripts": "3.2.0",
-    "react-select": "^3.0.8"
+    "react-select": "3.0.8",
+    "react-simple-maps": "^1.0.0-beta.0",
+    "react-svg-map": "^2.0.1",
+    "react-twitter-embed": "^3.0.3",
+    "svg-maps": "^1.0.0-beta.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -30,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "c3": "^0.7.11"
   }
 }

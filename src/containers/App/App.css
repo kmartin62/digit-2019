@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -21,6 +22,42 @@
   color: #09d3ac;
 }
 
-.table {
-background-image: url('asd.jpg');
+.twitterWidget{
+  width: 25%;
+  height: 300px;
+}
+
+.map {
+    width: 50%;
+    margin: auto;
+}
+
+.map path {
+  stroke: black;
+  stroke-width: 5px;
+}
+
+.test a:hover{
+    background-color: yellow;
+}
+
+.map a:hover{
+    background-color: yellow;
+}
+
+path:hover{
+    stroke: #002868 !important;
+    stroke-width:2px;
+    stroke-linejoin: round;
+    fill: #002868 !important;
+    cursor: pointer;
+}
+
+polygon {
+    stroke-width: 1;
+    stroke: red;
+    fill: transparent;
+}
+polygon:hover {
+    fill: red;
 }
