@@ -6,37 +6,10 @@ import {Bar} from 'react-chartjs-2';
 import firebase from 'firebase/app';
 import 'firebase/database'; // If using Firebase database
 import 'firebase/storage';  // If using Firebase storage
-import Iframe from 'react-iframe'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
-import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton,
-    TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed,
-    TwitterOnAirButton } from 'react-twitter-embed';
-import TestComponent from "../TestComponent/TestComponent";
+import options from "../../repository/cities";
+import data from "../../repository/data";
 import MapComponent from "../MapComponent/MapComponent";
 
-
-const data = {
-    labels: [],
-    datasets: [
-        {
-            label: '',
-            backgroundColor: 'rgb(153, 153, 102)',
-            borderColor: 'rgba(255,99,132,1)',
-            data: []
-        }
-    ]
-};
-
-const options = [
-    { value: 'skopje', label: 'Skopje' },
-    { value: 'bitola', label: 'Bitola' },
-    { value: 'radovis', label: 'Radovis' },
-];
 
 class App extends Component {
 
@@ -53,7 +26,6 @@ class App extends Component {
             pm25: null,
             aqi: null,
             city_name: null,
-            city: this.props.someData,
             value: '',
             selectedOption: null,
         };
@@ -138,15 +110,6 @@ class App extends Component {
 
     }
 
-    clicked(e){
-        console.log(e.target.id);
-        this.readUserData(e.target.id)
-    }
-
-    // testFunction(e){
-    //     console.log("IMINIMIN" + e.target);
-    // }
-
     myFunction(param){
         this.readUserData(param.target.id);
         console.log("do something", param.target.id);
@@ -160,9 +123,8 @@ class App extends Component {
         return (
 
             <div>
-                {/*<TestComponent/>*/}
             <Select
-                    placeholder={"Skopje"}
+                    placeholder={this.state.city_name}
                     value={selectedOption}
                     onChange={this.handleChange}
                     options={options}
@@ -192,16 +154,6 @@ class App extends Component {
                 <div style={{width: 555}}>
                     <Bar data={data} />
                 </div>
-
-                {/*<Iframe url="https://www.sociablekit.com/app/embed/index.php?embed_id=30223"*/}
-                        {/*frameborder='0' width='500' height='500'*/}
-                        {/*className="myClassname"*/}
-                        {/*display="initial"*/}
-                        {/*position="relative"/>*/}
-
-                {/*<TwitterTweetEmbed*/}
-                {/*tweetId={'933354946111705097'}*/}
-                {/*/>*/}
 
                <MapComponent myFunction={this.myFunction}/>
 

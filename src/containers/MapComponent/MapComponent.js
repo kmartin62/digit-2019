@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 
 class MapComponent extends Component {
 
-    read = this.props.test;
-
-    clicked(e){
-        console.log(e.target.id);
-        // this.read;
-        // this.props.test(e.target.id);
-        // this.readUserData(e.target.id)
-    }
-
     render() {
         return (
             <div>
